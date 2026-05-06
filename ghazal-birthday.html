@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>غرفة الأسرار - عيد ميلاد غزل 🌙</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a14;
+    --surface: #10101e;
+    --card: #13132a;
+    --border: #2a2a50;
+    --accent: #c9a84c;
+    --accent2: #7b5ea7;
+    --accent3: #4a9bbe;
+    --text: #e8e0f0;
+    --muted: #7a7090;
+    --glow: rgba(201,168,76,0.18);
+    --success: #4ecb71;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cairo', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* Stars background */
+  .stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--d, 3s) ease-in-out infinite alternate;
+  }
+  @keyframes twinkle {
+    from { opacity: 0.1; transform: scale(1); }
+    to   { opacity: 0.9; transform: scale(1.4); }
+  }
+
+  /* Floating particles */
+  .particle {
+    position: fixed;
+    pointer-events: none;
+    font-size: 1.2rem;
+    animation: floatUp var(--dur, 6s) linear infinite;
+    opacity: 0;
+    z-index: 1;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.7; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* Screen base */
+  .screen {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    display: none;
+  }
+  .screen.active { display: flex; }
+
+  /* === INTRO SCREEN === */
+  #intro {
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .moon-container {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    margin: 0 auto;
+  }
+  .moon {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ffe47a, #c9a84c 50%, #7a5a10);
+    box-shadow: 0 0 60px rgba(201,168,76,0.5), 0 0 120px rgba(201,168,76,0.2);
+    animation: moonPulse 4s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
+  }
+  .moon::before {
+    content: '';
+    position: absolute;
+    top: 20px; left: 20px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.15);
+  }
+  .moon::after {
+    content: '';
+    position: absolute;
+    top: 50px; left: 60px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.1);
+  }
+  .moon-ring {
+    position: absolute;
+    inset: -20px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.3);
+    animation: ringPulse 4s ease-in-out infinite;
+  }
+  .moon-ring:nth-child(2) {
+    inset: -40px;
+    border-color: rgba(201,168,76,0.15);
+    animation-delay: 0.5s;
+  }
+  @keyframes moonPulse {
+    0%,100% { box-shadow: 0 0 60px rgba(201,168,76,0.5), 0 0 120px rgba(201,168,76,0.2); }
+    50%      { box-shadow: 0 0 80px rgba(201,168,76,0.7), 0 0 160px rgba(201,168,76,0.3); }
+  }
+  @keyframes ringPulse {
+    0%,100% { transform: scale(1); opacity: 1; }
+    50%      { transform: scale(1.05); opacity: 0.5; }
+  }
+
+  .intro-title {
+    font-family: 'Amiri', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: var(--accent);
+    text-shadow: 0 0 30px rgba(201,168,76,0.5);
+    line-height: 1.4;
+  }
+
+  .intro-subtitle {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 400px;
+    line-height: 1.8;
+  }
+
+  .intro-subtitle span {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .divider {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 0 auto;
+  }
+
+  /* Buttons */
+  .btn {
+    padding: 0.9rem 2.5rem;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #a07830);
+    color: #1a1000;
+    box-shadow: 0 4px 25px rgba(201,168,76,0.4);
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 35px rgba(201,168,76,0.6);
+  }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .btn:hover::after { opacity: 1; }
+
+  /* === PUZZLE SCREEN === */
+  #puzzle {
+    gap: 1.5rem;
+    max-width: 560px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* Progress */
+  .progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 4px;
+    transition: width 0.6s ease;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+
+  /* Puzzle card */
+  .puzzle-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    animation: slideIn 0.5s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .puzzle-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 150px; height: 150px;
+    background: radial-gradient(circle, var(--glow), transparent 70%);
+    pointer-events: none;
+  }
+
+  .puzzle-number {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .puzzle-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+    animation: iconFloat 3s ease-in-out infinite;
+  }
+  @keyframes iconFloat {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+  .puzzle-question {
+    font-family: 'Amiri', serif;
+    font-size: 1.4rem;
+    line-height: 1.7;
+    margin-bottom: 0.5rem;
+  }
+  .puzzle-hint {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  /* Options grid */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+  }
+  .option-btn {
+    padding: 0.9rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(201,168,76,0.08);
+    transform: translateY(-2px);
+  }
+  .option-btn.correct {
+    border-color: var(--success);
+    background: rgba(78,203,113,0.12);
+    color: var(--success);
+    animation: correctPop 0.4s ease;
+  }
+  .option-btn.wrong {
+    border-color: #e05a5a;
+    background: rgba(224,90,90,0.1);
+    color: #e05a5a;
+    animation: shake 0.4s ease;
+  }
+  @keyframes correctPop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.06); }
+    100% { transform: scale(1); }
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25%      { transform: translateX(-6px); }
+    75%      { transform: translateX(6px); }
+  }
+  .option-btn:disabled { cursor: default; }
+
+  /* Feedback */
+  .feedback {
+    margin-top: 1rem;
+    padding: 0.9rem 1.2rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(78,203,113,0.1);
+    border: 1px solid rgba(78,203,113,0.3);
+    color: var(--success);
+  }
+  .feedback.wrong-fb {
+    background: rgba(224,90,90,0.08);
+    border: 1px solid rgba(224,90,90,0.25);
+    color: #e07070;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .next-btn-wrap { text-align: center; margin-top: 1rem; display: none; }
+  .next-btn-wrap.show { display: block; }
+
+  /* Tries counter */
+  .tries-display {
+    display: flex;
+    gap: 0.4rem;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+  .try-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    transition: all 0.3s;
+  }
+  .try-dot.used { background: #e05a5a; transform: scale(0.7); }
+
+  /* === VICTORY SCREEN === */
+  #victory {
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .confetti-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+  }
+  .confetti-piece {
+    position: absolute;
+    top: -20px;
+    width: 10px;
+    height: 14px;
+    animation: confettiFall var(--dur, 3s) linear var(--delay, 0s) infinite;
+    opacity: 0;
+  }
+  @keyframes confettiFall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.3; }
+  }
+
+  .trophy {
+    font-size: 5rem;
+    animation: trophyBounce 1s ease;
+  }
+  @keyframes trophyBounce {
+    0%   { transform: scale(0) rotate(-20deg); }
+    60%  { transform: scale(1.2) rotate(10deg); }
+    80%  { transform: scale(0.95) rotate(-5deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+
+  .victory-title {
+    font-family: 'Amiri', serif;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    color: var(--accent);
+    text-shadow: 0 0 40px rgba(201,168,76,0.6);
+    line-height: 1.4;
+  }
+
+  .victory-message {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.8rem 2rem;
+    max-width: 420px;
+    width: 100%;
+    font-size: 1.05rem;
+    line-height: 2;
+    color: var(--text);
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  .victory-message::before {
+    content: '❝';
+    position: absolute;
+    top: -1.2rem;
+    right: 1.5rem;
+    font-size: 3rem;
+    color: var(--accent);
+    opacity: 0.5;
+  }
+  .victory-message .poem-line {
+    font-family: 'Amiri', serif;
+    font-size: 1.15rem;
+    color: var(--accent);
+    line-height: 2;
+    font-style: italic;
+  }
+    color: var(--accent);
+    font-weight: 700;
+    font-family: 'Amiri', serif;
+    font-size: 1.2rem;
+  }
+
+  .stars-row {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  .star-icon {
+    font-size: 1.8rem;
+    animation: starSpin 0.5s ease forwards;
+    opacity: 0;
+  }
+  .star-icon:nth-child(1) { animation-delay: 0.2s; }
+  .star-icon:nth-child(2) { animation-delay: 0.4s; }
+  .star-icon:nth-child(3) { animation-delay: 0.6s; }
+  @keyframes starSpin {
+    from { opacity: 0; transform: scale(0) rotate(-180deg); }
+    to   { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  /* Music toggle button */
+  #musicBtn {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    z-index: 50;
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    transition: all 0.3s;
+  }
+  #musicBtn:hover { border-color: var(--accent); transform: scale(1.1); }
+  .unlock-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .unlock-overlay.show { opacity: 1; pointer-events: all; }
+  .unlock-overlay.hide { opacity: 0; pointer-events: none; }
+  .lock-icon {
+    font-size: 5rem;
+    animation: lockPop 0.5s ease;
+  }
+  .unlock-text {
+    font-family: 'Amiri', serif;
+    font-size: 1.8rem;
+    color: var(--accent);
+  }
+  @keyframes lockPop {
+    0%   { transform: scale(0.5); }
+    70%  { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Stars -->
+<div class="stars" id="stars"></div>
+
+<!-- Particles -->
+<div id="particles"></div>
+
+<!-- Unlock overlay -->
+<div class="unlock-overlay" id="unlockOverlay">
+  <div class="lock-icon" id="lockIcon">🔓</div>
+  <div class="unlock-text" id="unlockText">تم فتح القفل!</div>
+</div>
+
+<!-- Confetti -->
+<div class="confetti-container" id="confetti"></div>
+
+<!-- Music toggle -->
+<button id="musicBtn" onclick="toggleMusic()" title="كتم الموسيقى">🎵</button>
+
+<!-- INTRO SCREEN -->
+<div class="screen active" id="intro">
+  <div class="moon-container">
+    <div class="moon-ring"></div>
+    <div class="moon-ring"></div>
+    <div class="moon"></div>
+  </div>
+
+  <div>
+    <div class="intro-title">غرفة الأسرار</div>
+    <div class="divider" style="margin-top:0.8rem;"></div>
+  </div>
+
+  <div class="intro-subtitle">
+    مرحباً <span>غزل</span> 🌙<br>
+    أمامكِ ثلاثة أقفال سرية...<br>
+    هل تستطيعين فتحها جميعاً؟
+  </div>
+
+  <button class="btn btn-primary" onclick="startGame()">ابدئي المغامرة ✨</button>
+</div>
+
+<!-- PUZZLE SCREEN -->
+<div class="screen" id="puzzle">
+  <div style="width:100%; max-width:520px;">
+    <div class="progress-label">
+      <span id="progressLabel">اللغز 1 من 3</span>
+      <span id="progressPct">33%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width:33%"></div>
+    </div>
+  </div>
+
+  <div class="puzzle-card" id="puzzleCard">
+    <div class="puzzle-number" id="puzzleNumber">اللغز الأول 🔐</div>
+    <span class="puzzle-icon" id="puzzleIcon">🏺</span>
+    <div class="puzzle-question" id="puzzleQuestion"></div>
+    <div class="puzzle-hint" id="puzzleHint"></div>
+    <div class="options-grid" id="optionsGrid"></div>
+    <div class="tries-display" id="triesDisplay"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="next-btn-wrap" id="nextWrap">
+      <button class="btn btn-primary" id="nextBtn" onclick="nextPuzzle()">التالي ←</button>
+    </div>
+  </div>
+</div>
+
+<!-- VICTORY SCREEN -->
+<div class="screen" id="victory">
+  <div class="trophy" id="trophy">🏆</div>
+  <div class="stars-row">
+    <div class="star-icon">⭐</div>
+    <div class="star-icon">⭐</div>
+    <div class="star-icon">⭐</div>
+  </div>
+  <div class="victory-title">أحسنتِ يا غزل! 🌙</div>
+  <div class="victory-message">
+    <div class="poem-line">الناسُ تَرقَبُ في الآفاقِ أنجمها</div>
+    <div class="poem-line">و يومَ مولدكِ كانت <span class="name-highlight">النجومُ تتأمّل</span> ✨</div>
+    <br>
+    أختي يا <span class="name-highlight">خير جليسةٍ</span> في الأزمُنِ،<br>
+    كل عامٍ وأنتِ بألفِ خيرٍ وسلامة،<br>
+    أحمدُ اللهَ على وجودكِ بيننا،<br><br>
+    وأرجو لوجهكِ البديعِ ألّا تفارقَهُ <span class="name-highlight">البسمة</span>،<br>
+    ويبعدُ عنهُ كلَّ كَشرة،<br>
+    وأرجو لقلبكِ <span class="name-highlight">الاطمئنانَ والمسرّة</span>،<br>
+    وأن يتجرّدَ من كلِّ خوفٍ وحزنٍ ومشرّة،<br><br>
+    وأرجو أن أبقى لكِ <span class="name-highlight">سندًا</span>،<br>
+    ولرأسكِ رفعةً تفخرين بهِ وتتعالين<br>
+    في كلِّ زمانٍ ومكان 💛
+  </div>
+  <button class="btn btn-primary" onclick="restartGame()" style="margin-top:0.5rem;">العب مرة أخرى 🔁</button>
+</div>
+
+<script>
+// ===== Web Audio API Sound Engine =====
+let audioCtx = null;
+let ambientGain = null;
+let audioUnlocked = false;
+let muted = false;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function unlockAudio() {
+  if (audioUnlocked) return;
+  audioUnlocked = true;
+  startAmbient();
+}
+
+function startAmbient() {
+  const ctx = getAudioCtx();
+  ambientGain = ctx.createGain();
+  ambientGain.gain.setValueAtTime(0, ctx.currentTime);
+  ambientGain.gain.linearRampToValueAtTime(0.06, ctx.currentTime + 2.5);
+  ambientGain.connect(ctx.destination);
+
+  const notes = [130.81, 164.81, 196.00, 246.94, 293.66];
+  notes.forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    g.gain.value = 0.012 + i * 0.004;
+    osc.connect(g); g.connect(ambientGain);
+    const lfo = ctx.createOscillator();
+    const lfoG = ctx.createGain();
+    lfo.frequency.value = 0.25 + i * 0.06;
+    lfoG.gain.value = 1.2;
+    lfo.connect(lfoG); lfoG.connect(osc.frequency);
+    lfo.start(); osc.start();
+  });
+  shimmerLoop(ctx);
+}
+
+function shimmerLoop(ctx) {
+  const tick = () => {
+    if (!ambientGain || muted) { setTimeout(tick, 1500); return; }
+    const osc = ctx.createOscillator();
+    const env = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = [523.25,659.25,783.99,1046.5][Math.floor(Math.random()*4)];
+    env.gain.setValueAtTime(0, ctx.currentTime);
+    env.gain.linearRampToValueAtTime(0.035, ctx.currentTime + 0.3);
+    env.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.4);
+    osc.connect(env); env.connect(ambientGain);
+    osc.start(); osc.stop(ctx.currentTime + 1.5);
+    setTimeout(tick, 1200 + Math.random() * 1800);
+  };
+  setTimeout(tick, 1200);
+}
+
+function toggleMusic() {
+  muted = !muted;
+  if (ambientGain) {
+    ambientGain.gain.linearRampToValueAtTime(muted ? 0 : 0.06, getAudioCtx().currentTime + 0.6);
+  }
+  const btn = document.getElementById('musicBtn');
+  btn.textContent = muted ? '🔇' : '🎵';
+}
+
+function playCorrect() {
+  const ctx = getAudioCtx();
+  [[523.25,0],[659.25,0.15],[783.99,0.30]].forEach(([freq, d]) => {
+    const osc = ctx.createOscillator(), env = ctx.createGain();
+    osc.type = 'sine'; osc.frequency.value = freq;
+    env.gain.setValueAtTime(0, ctx.currentTime+d);
+    env.gain.linearRampToValueAtTime(0.32, ctx.currentTime+d+0.05);
+    env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+d+0.6);
+    osc.connect(env); env.connect(ctx.destination);
+    osc.start(ctx.currentTime+d); osc.stop(ctx.currentTime+d+0.65);
+  });
+}
+
+function playWrong() {
+  const ctx = getAudioCtx();
+  const osc = ctx.createOscillator(), env = ctx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(220, ctx.currentTime);
+  osc.frequency.linearRampToValueAtTime(110, ctx.currentTime + 0.28);
+  env.gain.setValueAtTime(0.18, ctx.currentTime);
+  env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.32);
+  osc.connect(env); env.connect(ctx.destination);
+  osc.start(); osc.stop(ctx.currentTime + 0.35);
+}
+
+function playUnlock() {
+  const ctx = getAudioCtx();
+  [[392,0],[523.25,0.12],[659.25,0.24],[880,0.37],[1046.5,0.52]].forEach(([freq,d]) => {
+    const osc = ctx.createOscillator(), env = ctx.createGain();
+    osc.type = 'sine'; osc.frequency.value = freq;
+    env.gain.setValueAtTime(0, ctx.currentTime+d);
+    env.gain.linearRampToValueAtTime(0.22, ctx.currentTime+d+0.06);
+    env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+d+0.5);
+    osc.connect(env); env.connect(ctx.destination);
+    osc.start(ctx.currentTime+d); osc.stop(ctx.currentTime+d+0.55);
+  });
+}
+
+function playVictory() {
+  const ctx = getAudioCtx();
+  [[523.25,0],[659.25,0.15],[783.99,0.30],[1046.5,0.46],
+   [880,0.65],[1046.5,0.80],[1174.66,0.96],[1318.51,1.15]].forEach(([freq,d]) => {
+    const osc = ctx.createOscillator(), env = ctx.createGain();
+    osc.type = 'triangle'; osc.frequency.value = freq;
+    env.gain.setValueAtTime(0, ctx.currentTime+d);
+    env.gain.linearRampToValueAtTime(0.28, ctx.currentTime+d+0.05);
+    env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+d+0.55);
+    osc.connect(env); env.connect(ctx.destination);
+    osc.start(ctx.currentTime+d); osc.stop(ctx.currentTime+d+0.6);
+  });
+}
+
+function playClick() {
+  const ctx = getAudioCtx();
+  const osc = ctx.createOscillator(), env = ctx.createGain();
+  osc.type = 'sine'; osc.frequency.value = 480;
+  env.gain.setValueAtTime(0.12, ctx.currentTime);
+  env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+  osc.connect(env); env.connect(ctx.destination);
+  osc.start(); osc.stop(ctx.currentTime + 0.12);
+}
+
+// ===== Stars =====
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 120; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2.5 + 0.5;
+  s.style.cssText = `
+    width:${size}px; height:${size}px;
+    top:${Math.random()*100}%; left:${Math.random()*100}%;
+    --d:${2+Math.random()*4}s;
+    animation-delay:${Math.random()*4}s;
+  `;
+  starsEl.appendChild(s);
+}
+
+// ===== Particles =====
+const particlesEl = document.getElementById('particles');
+const emojis = ['✨','🌙','⭐','💫','🔮','🕯️'];
+for (let i = 0; i < 10; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+  p.style.cssText = `
+    left:${Math.random()*100}%;
+    --dur:${6+Math.random()*8}s;
+    animation-delay:${Math.random()*8}s;
+  `;
+  particlesEl.appendChild(p);
+}
+
+// ===== Puzzles =====
+const puzzles = [
+  {
+    icon: '🔮',
+    label: 'اللغز الأول 🔐',
+    question: 'أيّ الأشياء تكبر كلما أخذت منها؟',
+    hint: 'فكّري في الأشياء غير المادية...',
+    options: ['الذهب', 'الحفرة', 'الكتاب', 'الماء'],
+    correct: 1,
+    successMsg: '✅ ممتاز! الحفرة تكبر كلما أخذت منها... مثل الأحلام الكبيرة! 🌙',
+    failMsg: '❌ ليس هذا... فكّري في الأشياء التي تكبر بالنقص!'
+  },
+  {
+    icon: '🕯️',
+    label: 'اللغز الثاني 🔐',
+    question: 'أنا دائماً أمامكِ لكنك لا تستطيعين رؤيتي... من أنا؟',
+    hint: 'ليس شيئاً مادياً، بل هو مفهوم...',
+    options: ['الماضي', 'الحاضر', 'المستقبل', 'الحلم'],
+    correct: 2,
+    successMsg: '✅ رائع! المستقبل دائماً أمامنا، مليء بالمفاجآت الجميلة لكِ! 💫',
+    failMsg: '❌ حاولي مجدداً! ما هو الشيء الذي يسبق كل لحظة تعيشينها؟'
+  },
+  {
+    icon: '🌙',
+    label: 'اللغز الثالث 🔐',
+    question: 'ما الشيء الذي كلما أعطيتَه ازددتَ به؟',
+    hint: 'شيء لا ينتهي ولا يُكيَّل بالمقاييس...',
+    options: ['المال', 'الطعام', 'الوقت', 'الحب'],
+    correct: 3,
+    successMsg: '✅ بالضبط! الحب كلما أعطيته كلما امتلأ قلبك... مثل قلبكِ الكبير يا غزل! 💛',
+    failMsg: '❌ قريبة جداً! ما الشيء اللامادي الذي يتضاعف بالعطاء؟'
+  }
+];
+
+let current = 0;
+let tries = 0;
+let maxTries = 3;
+let answered = false;
+let totalWrong = 0;
+
+function startGame() {
+  unlockAudio();
+  showScreen('puzzle');
+  loadPuzzle(0);
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function loadPuzzle(idx) {
+  const p = puzzles[idx];
+  current = idx;
+  tries = 0;
+  answered = false;
+
+  // Progress
+  const pct = Math.round(((idx+1)/puzzles.length)*100);
+  document.getElementById('progressLabel').textContent = `اللغز ${idx+1} من ${puzzles.length}`;
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  document.getElementById('puzzleNumber').textContent = p.label;
+  document.getElementById('puzzleIcon').textContent = p.icon;
+  document.getElementById('puzzleQuestion').textContent = p.question;
+  document.getElementById('puzzleHint').textContent = '💡 ' + p.hint;
+
+  // Options
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  p.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(i, btn);
+    grid.appendChild(btn);
+  });
+
+  // Tries dots
+  renderTries();
+
+  // Hide feedback & next
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.textContent = '';
+  document.getElementById('nextWrap').className = 'next-btn-wrap';
+
+  // Animate card
+  const card = document.getElementById('puzzleCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideIn 0.5s ease';
+}
+
+function renderTries() {
+  const d = document.getElementById('triesDisplay');
+  d.innerHTML = '';
+  for (let i = 0; i < maxTries; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'try-dot' + (i < tries ? ' used' : '');
+    d.appendChild(dot);
+  }
+}
+
+function checkAnswer(idx, btn) {
+  if (answered) return;
+  const p = puzzles[current];
+  const allBtns = document.querySelectorAll('.option-btn');
+
+  if (idx === p.correct) {
+    answered = true;
+    btn.classList.add('correct');
+    allBtns.forEach(b => b.disabled = true);
+    playCorrect();
+    showFeedback(true, p.successMsg);
+    document.getElementById('nextWrap').className = 'next-btn-wrap show';
+    const nextBtn = document.getElementById('nextBtn');
+    nextBtn.textContent = current < puzzles.length - 1 ? 'التالي ←' : '🎉 افتح الجائزة!';
+  } else {
+    tries++;
+    totalWrong++;
+    btn.classList.add('wrong');
+    playWrong();
+    setTimeout(() => btn.classList.remove('wrong'), 500);
+    renderTries();
+
+    if (tries >= maxTries) {
+      answered = true;
+      allBtns.forEach((b, i) => {
+        b.disabled = true;
+        if (i === p.correct) b.classList.add('correct');
+      });
+      showFeedback(false, '🔑 الجواب الصحيح هو: ' + p.options[p.correct] + ' — ' + p.successMsg.split('! ')[1] || '');
+      document.getElementById('nextWrap').className = 'next-btn-wrap show';
+      const nextBtn = document.getElementById('nextBtn');
+      nextBtn.textContent = current < puzzles.length - 1 ? 'التالي ←' : '🎉 افتح الجائزة!';
+    } else {
+      showFeedback(false, p.failMsg + ` (${maxTries - tries} محاولة متبقية)`);
+    }
+  }
+}
+
+function showFeedback(correct, msg) {
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback show ' + (correct ? 'correct-fb' : 'wrong-fb');
+  fb.textContent = msg;
+}
+
+function nextPuzzle() {
+  playClick();
+  if (current < puzzles.length - 1) {
+    showUnlock(() => loadPuzzle(current + 1));
+  } else {
+    showUnlock(() => {
+      showScreen('victory');
+      launchConfetti();
+      setTimeout(playVictory, 300);
+    });
+  }
+}
+
+function showUnlock(cb) {
+  const overlay = document.getElementById('unlockOverlay');
+  const icon = document.getElementById('lockIcon');
+  const text = document.getElementById('unlockText');
+
+  if (current < puzzles.length - 1) {
+    icon.textContent = '🔓';
+    text.textContent = 'تم فتح القفل!';
+  } else {
+    icon.textContent = '🎁';
+    text.textContent = 'فتحتِ كل الأقفال!';
+  }
+
+  overlay.classList.add('show');
+  playUnlock();
+  setTimeout(() => {
+    overlay.classList.remove('show');
+    setTimeout(cb, 400);
+  }, 1500);
+}
+
+// ===== Confetti =====
+function launchConfetti() {
+  const container = document.getElementById('confetti');
+  container.innerHTML = '';
+  const colors = ['#c9a84c','#7b5ea7','#4a9bbe','#e07090','#4ecb71','#fff'];
+  for (let i = 0; i < 80; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.cssText = `
+      left:${Math.random()*100}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      width:${6+Math.random()*8}px;
+      height:${10+Math.random()*8}px;
+      border-radius:${Math.random()>0.5?'50%':'2px'};
+      --dur:${2.5+Math.random()*2}s;
+      --delay:${Math.random()*2}s;
+    `;
+    container.appendChild(piece);
+  }
+}
+
+function restartGame() {
+  document.getElementById('confetti').innerHTML = '';
+  totalWrong = 0;
+  showScreen('intro');
+}
+</script>
+</body>
+</html>
